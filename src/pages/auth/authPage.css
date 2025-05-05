@@ -1,0 +1,18 @@
+.auth-form-label {
+    width: 410px;
+    font-weight: 500;
+}
+
+.auth-form-logo-container {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.auth-form-switch-label {
+    color: #0004f8;
+    font-weight: bold;
+    font-size: 14px;
+    transition: 0.3s;
+    cursor: pointer;
+    padding-top: 10px;
+}
