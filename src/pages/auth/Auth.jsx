@@ -13,7 +13,7 @@ export const Auth = () => {
   }
 
   return (
-    <div >
+    <div className="auth-container">
         {isLogin ? (
           <Login switchAuthHandler={handleAuthPageToggle}/>
         ) : (
