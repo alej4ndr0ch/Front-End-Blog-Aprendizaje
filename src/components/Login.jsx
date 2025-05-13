@@ -1,100 +1,59 @@
-import { useState } from "react";
 import { Logo } from './Logo';
 import { Input } from './Input';
-import {
-    emailValidationMessage,
-    validateEmail,
-    validatePasswordMessage,
-    validatePassword
-} from '../shared/validators';
-import { useLogin } from '../shared/hooks'
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema } from '../shared/validators'; 
+import { useLogin } from '../shared/hooks';
 
 export const Login = ({ switchAuthHandler }) => {
-    const { login, isLoading } = useLogin();
+  const { login, isLoading } = useLogin();
 
-    const [formState, setFormState] = useState({
-        email: {
-            value: '',
-            isValid: false,
-            showError: false
-        },
-        password: {
-            value: '',
-            isValid: false,
-            showError: false
-        }
-    });
+  const { register, handleSubmit, formState: { errors, isValid } } = useForm({
+    resolver: yupResolver(loginSchema),
+    mode: "onBlur"
+  });
 
-    const handleInputValueChange = (value, field) => {
-        setFormState((prevState) => ({
-            ...prevState,
-            [field]: {
-                ...prevState[field],
-                value
-            }
-        }));
+  const onSubmit = (data) => {
+    try {
+      login(data.email, data.password);
+    } catch (error) {
+      if (error.response?.status === 401) {
+        toast.error("Correo o contraseña incorrectos");
+      } else {
+        toast.error("Error al iniciar sesión. Intenta más tarde.");
+      }
     }
+  };
 
-    const handleInputValidationOnBlur = (value, field) => {
-        let isValid = false;
-        switch (field) {
-            case 'email':
-                isValid = validateEmail(value);
-                break;
-            case 'password':
-                isValid = validatePassword(value);
-                break;
-            default:
-                break;
-        }
-        setFormState((prevState) => ({
-            ...prevState,
-            [field]: {
-                ...prevState[field],
-                isValid,
-                showError: !isValid
-            }
-        }));
-    }
+  return (
+    <div className="login-container">
+      <Logo />
+      <h1>Register Almacen</h1>
+      <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
+      <Input
+        field="email"
+        label="Email"
+        {...register("email")}
+        type="text"
+        showErrorMessage={!!errors.email}
+        validationMessage={errors.email?.message}
+      />
 
-    const handleLogin = (event) => {
-        event.preventDefault();
-        login(formState.email.value, formState.password.value);
-    }
-
-    const isSubmitButtonDisable = isLoading || !formState.email.isValid || !formState.password.isValid;
-
-    return (
-        <div className="login-container">
-            <Logo text={'Login Kinal Cast'} />
-            <form className="auth-form">
-                <Input
-                    field='email'
-                    label='Email'
-                    value={formState.email.value}
-                    onChangeHandler={handleInputValueChange}
-                    type='text'
-                    onBlurHandler={handleInputValidationOnBlur}
-                    showErrorMessage={formState.email.showError}
-                    validationMessage={emailValidationMessage}
-                />
-                <Input
-                    field='password'
-                    label='Password'
-                    value={formState.password.value}
-                    onChangeHandler={handleInputValueChange}
-                    type='password'
-                    onBlurHandler={handleInputValidationOnBlur}
-                    showErrorMessage={formState.password.showError}
-                    validationMessage={validatePasswordMessage}
-                />
-                <button onClick={handleLogin} disabled={isSubmitButtonDisable}>
-                    Log in
-                </button>
-            </form>
-            <span onClick={switchAuthHandler} className="auth-form-switch-label">
-                Don't have an account? Sign up
-            </span>
-        </div>
-    )
-}
+      <Input
+        field="password"
+        label="Password"
+        {...register("password")}
+        type="password"
+        showErrorMessage={!!errors.password}
+        validationMessage={errors.password?.message}
+      />
+        <button type="submit" disabled={isLoading || !isValid}>
+          Login
+        </button>
+      </form>
+      <span onClick={switchAuthHandler} className="auth-form-switch-label">
+        Don't have an account? Sign up
+      </span>
+    </div>
+  );
+};

@@ -1,145 +1,85 @@
-import { useState } from 'react';
 import { Logo } from './Logo';
 import { Input } from './Input';
-import {
-    validateUsername,
-    validateEmail,
-    validatePassword,
-    validateConfirPassword,
-    validateUsernameMessage,
-    emailValidationMessage,
-    validatePasswordMessage,
-    passwordConfirmationMessage
-} from '../shared/validators'
-import { useRegister } from '../shared/hooks'
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { registerSchema } from '../shared/validators/authValidator';
+import { useRegister } from '../shared/hooks';
+import toast from "react-hot-toast";
 
 export const Register = ({ switchAuthHandler }) => {
+  const { register: registerUser, isLoading } = useRegister();
 
-    const { register, isLoading } = useRegister()
+  const { register, handleSubmit, formState: { errors, isValid } } = useForm({
+    resolver: yupResolver(registerSchema),
+    mode: "onBlur"
+  });
 
-    const [formState, setFormState] = useState({
-        email: {
-            value: '',
-            isValid: false,
-            showError: false,
-        },
-        username: {
-            value: '',
-            isValid: false,
-            showError: false,
-        },
-        password: {
-            value: '',
-            isValid: false,
-            showError: false,
-        },
-        passwordConfir: {
-            value: '',
-            isValid: false,
-            showError: false,
-        }
-    })
-
-    const handleInputValueChange = (value, field) => {
-        setFormState((prevState) => ({
-            ...prevState,
-            [field]: {
-                ...prevState[field],
-                value
-            }
-        }));
+  const onSubmit = async (data) => {
+    await registerUser(data.name, data.email, data.password, data.username);
+  try {
+    await registerUser(name, email, password, username);
+    toast.success("Registro exitoso");
+  } catch (error) {
+    if (error.response?.status === 409) {
+      toast.error("Ya existe una cuenta con ese correo electrónico");
+    } else {
+      toast.error("Error al registrar. Intenta de nuevo.");
     }
+  }
+  };
 
-    const handleInputValidationOnBlur = (value, field) => {
-        let isValid = false;
-        switch (field) {
-            case 'email':
-                isValid = validateEmail(value);
-                break;
-            case 'username':
-                isValid = validateUsername(value);
-                break;
-            case 'password':
-                isValid = validatePassword(value);
-                break;
-            case 'passwordConfir':
-                isValid = validateConfirPassword(formState.password.value, value)
-                break;
-            default:
-                break;
-        }
-        setFormState((prevState) => ({
-            ...prevState,
-            [field]: {
-                ...prevState[field],
-                isValid,
-                showError: !isValid
-            }
-        }));
-    }
 
-    const handleRegister = (event) => {
-        event.preventDefault()
-        register(formState.email.value, formState.password.value, formState.username.value)
-    }
-
-    const isSubmitButtonDisable = isLoading ||
-        !formState.email.isValid ||
-        !formState.password.isValid ||
-        !formState.username.isValid ||
-        !formState.passwordConfir.isValid;
-
-    return (
-        <div className="register-container">
-            <Logo text={'Register Kinal Cast'} />
-            <form className="auth-form">
-                <Input
-                    field='email'
-                    label='Email'
-                    value={formState.email.value}
-                    onChangeHandler={handleInputValueChange}
-                    type='text'
-                    onBlurHandler={handleInputValidationOnBlur}
-                    showErrorMessage={formState.email.showError}
-                    validationMessage={emailValidationMessage}
-                />
-                <Input
-                    field='username'
-                    label='Username'
-                    value={formState.username.value}
-                    onChangeHandler={handleInputValueChange}
-                    type='text'
-                    onBlurHandler={handleInputValidationOnBlur}
-                    showErrorMessage={formState.username.showError}
-                    validationMessage={validateUsernameMessage}
-                />
-                <Input
-                    field='password'
-                    label='Password'
-                    value={formState.password.value}
-                    onChangeHandler={handleInputValueChange}
-                    type='password'
-                    onBlurHandler={handleInputValidationOnBlur}
-                    showErrorMessage={formState.password.showError}
-                    validationMessage={validatePasswordMessage}
-                />
-                <Input
-                    field='passwordConfir'
-                    label='Password Confirmation'
-                    value={formState.passwordConfir.value}
-                    onChangeHandler={handleInputValueChange}
-                    type='password'
-                    onBlurHandler={handleInputValidationOnBlur}
-                    showErrorMessage={formState.passwordConfir.showError}
-                    validationMessage={passwordConfirmationMessage}
-                />
-                <button onClick={handleRegister} disabled={isSubmitButtonDisable}>
-                    Register
-                </button>
-            </form>
-            <span onClick={switchAuthHandler} className='auth-form-switch-label'>
-                Already have an account? Sign up
-            </span>
-        </div>
-    )
-}
+  return (
+    <div className="register-container">
+      <Logo />
+      <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
+      <Input
+            field="name"
+            label="Name"
+            {...register("name")}
+            type="text"
+            showErrorMessage={!!errors.name}
+            validationMessage={errors.name?.message}
+        />
+        <Input
+            field="email"
+            label="Email"
+            {...register("email")}
+            type="text"
+            showErrorMessage={!!errors.email}
+            validationMessage={errors.email?.message}
+        />
+        <Input
+            field="username"
+            label="Username"
+            {...register("username")}
+            type="text"
+            showErrorMessage={!!errors.username}z
+            validationMessage={errors.username?.message}
+        />
+        <Input
+          field="password"
+          label="Password"
+          {...register("password")}
+          type="password"
+          showErrorMessage={!!errors.password}
+          validationMessage={errors.password?.message}
+        />
+        <Input
+          field="passwordConfir"
+          label="Password Confirmation"
+          {...register("passwordConfir")}
+          type="password"
+          showErrorMessage={!!errors.passwordConfir}
+          validationMessage={errors.passwordConfir?.message}
+        />
+        <button type="submit" disabled={isLoading || !isValid}>
+          Register
+        </button>
+      </form>
+      <span onClick={switchAuthHandler} className='auth-form-switch-label'>
+        Already have an account? Sign up
+      </span>
+    </div>
+  );
+};

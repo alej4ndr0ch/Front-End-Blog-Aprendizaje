@@ -9,19 +9,19 @@
 .login-container, .register-container {
     width: 500px;
     margin: 0 auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #ffffff;
+    border-radius: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
     height: auto;
-    box-shadow: 10px 10px 10px #0b336b;
+    box-shadow: 10px 10px 10px #5c5c5c;
     padding: 25px;
 }
  
 .register-container {
-    height: 500px;
+    height: 740px;
 }
  
 .auth-form {
@@ -32,14 +32,14 @@
 }
  
 .auth-form input {
-    margin: 5px 0;
+    margin: 8px 0;
     padding: 5px;
     width: 400px;
 }
  
 .auth-form button {
     cursor: pointer;
-    background-color: #0b336b; /* Twitch Purple */
+    background-color: #000000; /* Twitch Purple */
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -56,7 +56,7 @@
 }
  
 .auth-form button:disabled {
-    opacity: 0.3;
+    opacity: 0.5;
 }
  
 .auth-form-label {
@@ -65,12 +65,17 @@
 }
  
 .auth-form-logo-container {
-    font-size: 26px;
-    font-weight: bold;
+    width: 180px;
+    height: 420px;
+    margin-left: -300px;
+}
+
+.auth-logo-setting {
+    margin-right: 200px;
 }
  
 .auth-form-switch-label {
-    color: #2b7df0;
+    color: #ffffff;
     font-weight: bold;
     font-size: 14px;
     transition: 0.3s;
@@ -84,7 +89,7 @@
  
 .auth-form-validation-message {
     width: 400px;
-    color: red;
+    color: rgb(255, 0, 0);
 }
 
 .video-background {
@@ -95,10 +100,10 @@
     height: 100%;
     z-index: -1;
     overflow: hidden;
-  }
+}
    
   .video-background video {
     object-fit: cover;
     width: 100%;
     height: 100%;
-  }
+}

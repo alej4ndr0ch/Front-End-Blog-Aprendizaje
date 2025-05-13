@@ -4,34 +4,31 @@ import { register as registerRequest } from "../../services"
 import toast from "react-hot-toast";
 
 export const useRegister = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const [isLoading, setIsLoading] = useState(false)
+    const register = async (name, email, password, username) => {
+        setIsLoading(true);
+        try {
+            const response = await registerRequest({ name, email, password, username });
 
-    const navigate = useNavigate()
+            if (response.error) {
+                throw response.error;
+            }
 
-    const register = async (email, password, username) => {
-
-        setIsLoading(true)
-
-        const response = await registerRequest({ email, password, username })
-
-        setIsLoading(false)
-
-        if(response.error){
-            return toast.error(response.error?.response?.data || 'Ocurrio un error al registrar, intenta de nuevo')
+            const { userDetails } = response.data;
+            localStorage.setItem('user', JSON.stringify(userDetails));
+            toast.success('Usuario registrado exitosamente');
+            navigate('/');
+        } catch (error) {
+            toast.error(
+                error?.response?.data?.message || 'Ocurrió un error al registrar, intenta de nuevo'
+            );
+            throw error;
+        } finally {
+            setIsLoading(false);
         }
+    };
 
-        const { userDetails } = response.data
-
-        localStorage.setItem('user', JSON.stringify(userDetails));
-
-        toast.success('Usuario registrado exitosamente');
-
-        navigate('/')
-    }
-
-    return { 
-        register,
-        isLoading
-    }
-}
+    return { register, isLoading };
+};
