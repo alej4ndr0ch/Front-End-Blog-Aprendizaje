@@ -1,59 +1,111 @@
+import { useState } from "react";
 import { Logo } from './Logo';
 import { Input } from './Input';
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { loginSchema } from '../shared/validators'; 
+import {
+    emailValidationMessage,
+    validateEmail,
+    validatePasswordMessage,
+    validatePassword
+} from '../shared/validators';
 import { useLogin } from '../shared/hooks';
 
 export const Login = ({ switchAuthHandler }) => {
-  const { login, isLoading } = useLogin();
+    const { login, isLoading } = useLogin();
 
-  const { register, handleSubmit, formState: { errors, isValid } } = useForm({
-    resolver: yupResolver(loginSchema),
-    mode: "onBlur"
-  });
+    const [formState, setFormState] = useState({
+        email: {
+            value: '',
+            isValid: false,
+            showError: false
+        },
+        password: {
+            value: '',
+            isValid: false,
+            showError: false
+        }
+    });
 
-  const onSubmit = (data) => {
-    try {
-      login(data.email, data.password);
-    } catch (error) {
-      if (error.response?.status === 401) {
-        toast.error("Correo o contraseña incorrectos");
-      } else {
-        toast.error("Error al iniciar sesión. Intenta más tarde.");
-      }
-    }
-  };
+    const [loginError, setLoginError] = useState(null);
 
-  return (
-    <div className="login-container">
-      <Logo />
-      <h1>Register Almacen</h1>
-      <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        field="email"
-        label="Email"
-        {...register("email")}
-        type="text"
-        showErrorMessage={!!errors.email}
-        validationMessage={errors.email?.message}
-      />
+    const handleInputValueChange = (value, field) => {
+        setFormState((prevState) => ({
+            ...prevState,
+            [field]: {
+                ...prevState[field],
+                value
+            }
+        }));
+    };
 
-      <Input
-        field="password"
-        label="Password"
-        {...register("password")}
-        type="password"
-        showErrorMessage={!!errors.password}
-        validationMessage={errors.password?.message}
-      />
-        <button type="submit" disabled={isLoading || !isValid}>
-          Login
-        </button>
-      </form>
-      <span onClick={switchAuthHandler} className="auth-form-switch-label">
-        Don't have an account? Sign up
-      </span>
-    </div>
-  );
+    const handleInputValidationOnBlur = (value, field) => {
+        let isValid = false;
+        switch (field) {
+            case 'email':
+                isValid = validateEmail(value);
+                break;
+            case 'password':
+                isValid = validatePassword(value);
+                break;
+            default:
+                break;
+        }
+        setFormState((prevState) => ({
+            ...prevState,
+            [field]: {
+                ...prevState[field],
+                isValid,
+                showError: !isValid
+            }
+        }));
+    };
+
+    const handleLogin = (event) => {
+        event.preventDefault();
+
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+
+        if (storedUser && storedUser.email === formState.email.value && storedUser.password === formState.password.value) {
+            setLoginError(null);
+            login(formState.email.value, formState.password.value);
+        } else {
+            setLoginError("Invalid email or password");
+        }
+    };
+
+    const isSubmitButtonDisable = isLoading || !formState.email.isValid || !formState.password.isValid;
+
+    return (
+        <div className="login-container">
+            <Logo text={'Login Kinal Cast'} />
+            <form className="auth-form">
+                <Input
+                    field='email'
+                    label='Email'
+                    value={formState.email.value}
+                    onChangeHandler={handleInputValueChange}
+                    type='text'
+                    onBlurHandler={handleInputValidationOnBlur}
+                    showErrorMessage={formState.email.showError}
+                    validationMessage={emailValidationMessage}
+                />
+                <Input
+                    field='password'
+                    label='Password'
+                    value={formState.password.value}
+                    onChangeHandler={handleInputValueChange}
+                    type='password'
+                    onBlurHandler={handleInputValidationOnBlur}
+                    showErrorMessage={formState.password.showError}
+                    validationMessage={validatePasswordMessage}
+                />
+                {loginError && <div className="error-message">{loginError}</div>} {}
+                <button onClick={handleLogin} disabled={isSubmitButtonDisable}>
+                    Log in
+                </button>
+            </form>
+            <span onClick={switchAuthHandler} className="auth-form-switch-label">
+                Don't have an account? Sign up
+            </span>
+        </div>
+    );
 };

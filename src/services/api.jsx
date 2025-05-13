@@ -1,47 +1,30 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:3000/learningBlog/v1',
+    baseURL: 'http://127.0.0.1:3000/learningBlog/v1',
     timeout: 5000
 })
 
-apiClient.interceptors.request.use(
-    (config) => {
-        const useUserDetails = localStorage.getItem('user')
-
-        if(useUserDetails){
-            const token = JSON.parse(useUserDetails).token
-            config.headers['x-token'] = token; 
-        }
-
-        return config;
-    },
-    (e) => {
-        return Promise.reject(e)
-    }
-)
-
 export const getPublicationById = (id) => axios.get(`${API_URL}/${id}`);
 
-export const login = async(data) => {
+export const login = async (data) => {
     try {
         return await apiClient.post('auth/login', data)
     } catch (e) {
-        return{
+        return {
             error: true,
             e
         }
     }
 }
 
-export const register = async(data) => {
+export const register = async (data) => {
     try {
-        return await apiClient.post('auth/register', data)
+        const response = await apiClient.post('auth/register', data);
+        return response.data;
     } catch (e) {
-        return{
-            error: true,
-            e
-        }
+        console.error('Error en la solicitud de registro:', e);
+        return { error: true, message: e.response?.data?.message || 'Error desconocido' };
     }
 }
 

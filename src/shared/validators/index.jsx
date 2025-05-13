@@ -1,5 +1,7 @@
-export * from "./validateAvatarUrl.jsx";
+export * from './validateAvatarUrl.jsx';
+export * from './validateEmail.jsx';
 export * from './validatePassword.jsx';
 export * from './validateUsername.jsx';
-export * from './validateConfirPassword.jsx'
-export { loginSchema, registerSchema} from "./authValidator.jsx";
+export * from './validateDescription.jsx';
+export * from './validateConfirPassword.jsx';
+export * from './validateName.jsx';
