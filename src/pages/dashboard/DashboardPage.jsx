@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getPublications } from '../services/publicationService';
-import PublicationCard from '../components/PublicationCard';
+import { getPublications } from '../../services/api';
+import PublicationCard from '../../components/publication/PublicationCard';
+import  Eclipse  from '../../assets/Eclipse.mp4'
 
-export default function Publications() {
+export const Publications = () => {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -39,7 +40,13 @@ export default function Publications() {
   };
 
   return (
-    <div className="p-6">
+    
+    <div className="dashboard-container">
+      <div className="video-background">
+    <video autoPlay loop muted playsInline>
+        <source src={Eclipse} type="video/mp4"/>
+    </video>
+  </div>
       <h1 className="text-3xl font-bold mb-6">Publicaciones</h1>
 
       {loading && <p>Cargando publicaciones...</p>}
@@ -55,17 +62,17 @@ export default function Publications() {
         ))}
       </div>
 
-      <div className="flex justify-center gap-4 mt-8">
+      <div className="content-button">
         <button
           onClick={handlePrevious}
           disabled={pagination.desde === 0}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          className="container-button-previous"
         >
           Anterior
         </button>
         <button
           onClick={handleNext}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          className="container-button-next"
         >
           Siguiente
         </button>

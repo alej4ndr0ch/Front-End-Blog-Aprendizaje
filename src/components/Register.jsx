@@ -13,7 +13,7 @@ import {
     ValidateNameMessage,
     passwordConfirmationMessage
 } from '../shared/validators'
-import { useRegister } from '../shared/hooks'
+import { registerUser } from '../shared/hooks'
 
 export const Register = () => {
 

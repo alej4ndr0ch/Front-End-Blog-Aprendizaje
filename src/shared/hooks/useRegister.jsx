@@ -1,4 +1,4 @@
-const registerUser = async (name, username, email, password) => {
+export const registerUser = async (name, username, email, password) => {
   setIsLoading(true);
 
   const data = { name, username, email, password };

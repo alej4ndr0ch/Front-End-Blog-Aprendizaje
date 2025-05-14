@@ -1,1 +1,1 @@
-export { DashboardPage } from "./DashboardPage.jsx";
+export { Publications } from "./DashboardPage";
