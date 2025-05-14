@@ -56,27 +56,27 @@ export const Publications = () => {
         <p>No hay publicaciones disponibles.</p>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {publications.map(pub => (
-          <PublicationCard key={pub._id} publication={pub} />
-        ))}
-      </div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {publications.map(pub => (
+      <PublicationCard key={pub._id} publication={pub} />
+    ))}
+  </div>
 
-      <div className="content-button">
-        <button
-          onClick={handlePrevious}
-          disabled={pagination.desde === 0}
-          className="container-button-previous"
-        >
-          Anterior
-        </button>
-        <button
-          onClick={handleNext}
-          className="container-button-next"
-        >
-          Siguiente
-        </button>
-      </div>
-    </div>
+  <div className="pagination-container">
+    <button
+      onClick={handlePrevious}
+      disabled={pagination.desde === 0}
+      className="pagination-button"
+    >
+      Anterior
+    </button>
+    <button
+      onClick={handleNext}
+      className="pagination-button"
+    >
+      Siguiente
+    </button>
+  </div>
+</div>
   );
 }
