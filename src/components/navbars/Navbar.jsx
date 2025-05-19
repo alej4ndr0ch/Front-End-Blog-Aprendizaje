@@ -7,10 +7,10 @@ const NavLogo = () => {
         <div className="nav-logo-container">
             <img 
                 className="nav-logo"
-                width='100%'
-                height='100%'
+                width='80px'
+                height='40px'
                 src={logo}
-                alt="Escudo kinal"
+                alt="Logo personal"
             />
         </div>
     )
@@ -34,14 +34,6 @@ export const Navbar = () => {
         navigate('/auth')
     }
 
-    const handleNavigateToSettingPage = () => {
-        navigate('/settings')
-    }
-
-    const handleNavigateToChannelsPage = () => {
-        navigate('/channels')
-    }
-
     const handleLogout = () => {
         logout()
     }
@@ -50,7 +42,6 @@ export const Navbar = () => {
         <div className="nav-container">
             <NavLogo />
             <div className="nav-buttons-container">
-                <NavButton text="Browse" onClickHandler={handleNavigateToChannelsPage}/>
                 {!isLogged ? (
                     <NavButton text="Login" onClickHandler={handleNavigateToAuthPage}/>
                 ) : (

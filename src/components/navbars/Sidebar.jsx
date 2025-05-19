@@ -1,26 +1,29 @@
-export const Sidebar = ({channels}) => {
-    if(!channels){
-        return null
-    }
+// src/components/layout/Sidebar.jsx
+import { useState } from "react";
+import PublicationForm from "../publication/PublicationForm";
+import "../../pages/dashboard/dashboardPage.css";
 
-    return (
-        <div className="sidebar-container">
-            <span className="sidebar-title">sugeridos</span>
-            <span className="sidebar-subtitle">CANALES QUE SIGO</span>
-            {channels.map((channel) => {
-                return(
-                    <div key={channel.id} className="sidebar-list-item">
-                        <span className="sidebar-list-username">{channel.username}</span>
-                        <span className="sidebar-list-status"
-                            style={{
-                                
-                            }}
-                        >
-                                {channel.isOnline ? 'Online' : 'Offline'}
-                        </span>
-                    </div>
-                )
-            })}
-        </div>
-    )
-}
+export const Sidebar = () => {
+  const [showForm, setShowForm] = useState(false);
+
+  const toggleForm = () => {
+    setShowForm(!showForm);
+  };
+
+  const handlePublicationSubmit = (formData) => {
+    console.log("Datos enviados de la publicación:", formData);
+
+    alert("Publicación guardada");
+    setShowForm(false);
+  };
+
+  return (
+    <div className="sidebar-container">
+      <button onClick={toggleForm} className="create-publication-button">
+        <img src="/src/assets/formulario.png" alt="formulario.png"  className="form-button"/>
+      </button>
+
+      {showForm && <PublicationForm onSubmit={handlePublicationSubmit} />}
+    </div>
+  );
+};

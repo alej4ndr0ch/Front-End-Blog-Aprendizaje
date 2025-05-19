@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { validationAvatarUrl } from '../../shared/validators/validateAvatarUrl';
-import CommentForm from '../Comment/CommentForm';
 import '../../pages/dashboard/dashboardPage.css'
 
 export default function PublicationCard({ publication }) {

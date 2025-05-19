@@ -28,9 +28,9 @@ export const register = async (data) => {
     }
 };
 
-export const getPublications = async ({ desde, limite }) => {
+export const getPublications = async () => {
     try {
-        return await apiClient.get(`/api/publications?desde=${desde}&limite=${limite}`);
+        return await apiClient.get(`publications/`);
     } catch (e) {
         return {
             error: true,
@@ -38,6 +38,7 @@ export const getPublications = async ({ desde, limite }) => {
         };
     }
 };
+
 
 export const getPublicationDetails = async (publicationId) => {
     try {

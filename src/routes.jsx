@@ -1,9 +1,9 @@
 import { Auth } from './pages/auth';
-import { Publications} from './pages/dashboard/index'
+import { DashboardPage} from './pages/dashboard/index'
 
 
 const routes = [
-    {path: '/', element: <Publications />},
+    {path: '/', element: <DashboardPage />},
 ]
 
 export default routes
