@@ -9,14 +9,14 @@ export const getPublicationById = (id) => apiClient.get(`/publications/${id}`);
 
 export const login = async (data) => {
     try {
-        return await apiClient.post('auth/login', data)
+        return await apiClient.post('auth/login', data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-}
+};
 
 export const register = async (data) => {
     try {
@@ -26,31 +26,30 @@ export const register = async (data) => {
         console.error('Error en la solicitud de registro:', e);
         return { error: true, message: e.response?.data?.message || 'Error desconocido' };
     }
-}
+};
 
-export const getPublications = async () => {
+export const getPublications = async ({ desde, limite }) => {
     try {
-        return await apiClient.get('/publications')
+        return await apiClient.get(`/api/publications?desde=${desde}&limite=${limite}`);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-}
+};
 
-export const getPublicationDetails = async () => {
+export const getPublicationDetails = async (publicationId) => {
     try {
-        return await apiClient.get('/publications/${publicationId}')
+        return await apiClient.get(`/publications/${publicationId}`);
     } catch (error) {
-        error: true
+        return { error: true };
     }
-}
+};
 
-export const addComment = async (publicationId, commentData) => {
+export const addComment = async (desde, limite) => {
     try {
-        const response = await apiClient.post(`/comments/${publicationId}`, commentData);
-        return response.data;
+        return await apiClient.get(`/publications?desde=${desde}&limite=${limite}`);
     } catch (error) {
         console.error("Error al agregar comentario:", error);
         return {
@@ -59,7 +58,6 @@ export const addComment = async (publicationId, commentData) => {
         };
     }
 };
-
 
 export const getComments = async () => {
     try {
