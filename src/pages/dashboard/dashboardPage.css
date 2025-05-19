@@ -347,46 +347,24 @@
     }
 }
 
-.pagination-container {
-    display: flex;
-    /* Usamos flexbox */
-    justify-content: center;
-    /* Centra los botones horizontalmente */
-    align-items: center;
-    /* Centra los botones verticalmente */
-    gap: 10px;
-    /* Espacio entre los botones */
-    margin-top: 20px;
-    /* Espacio superior */
+.publication-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
-/* Estilos para los botones */
-.pagination-button {
-    padding: 10px 20px;
-    /* Tamaño del botón */
-    background-color: #f3f4f6;
-    /* Fondo de los botones */
-    border: 1px solid #d1d5db;
-    /* Borde de los botones */
-    border-radius: 5px;
-    /* Bordes redondeados */
-    cursor: pointer;
-    /* Cursor tipo puntero */
-    transition: background-color 0.3s ease;
-    /* Animación al pasar el cursor */
+.publication-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Efecto hover */
-.pagination-button:hover {
-    background-color: #e5e7eb;
-    /* Color cuando el cursor está sobre el botón */
-}
-
-.pagination-button:disabled {
-    background-color: #d1d5db;
-    /* Color cuando el botón está deshabilitado */
-    cursor: not-allowed;
-    /* Cursor para mostrar que el botón no es clickeable */
+.publication-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
 }
 
 .video-background {

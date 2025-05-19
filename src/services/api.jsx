@@ -5,7 +5,7 @@ const apiClient = axios.create({
     timeout: 5000
 })
 
-export const getPublicationById = (id) => axios.get(`${API_URL}/${id}`);
+export const getPublicationById = (id) => apiClient.get(`/publications/${id}`);
 
 export const login = async (data) => {
     try {
@@ -41,8 +41,32 @@ export const getPublications = async () => {
 
 export const getPublicationDetails = async () => {
     try {
-        return await apiClient.get('/publications/${channelId}')
+        return await apiClient.get('/publications/${publicationId}')
     } catch (error) {
         error: true
     }
 }
+
+export const addComment = async (publicationId, commentData) => {
+    try {
+        const response = await apiClient.post(`/comments/${publicationId}`, commentData);
+        return response.data;
+    } catch (error) {
+        console.error("Error al agregar comentario:", error);
+        return {
+            success: false,
+            message: "Error al agregar comentario",
+        };
+    }
+};
+
+
+export const getComments = async () => {
+    try {
+        const response = await apiClient.get('/comments');
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener comentarios:", error);
+        return { data: { success: false, comments: [] } };
+    }
+};
