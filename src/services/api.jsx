@@ -30,35 +30,29 @@ export const getPublicationById = async (id) => {
     }
 };
 
-export const getComments = async (publicationId) => {
-  try {
-    const res = await apiClient.get(`/comments/publication/${publicationId}`);
-    return res.data; 
-  } catch (error) {
-    console.error("Error al obtener comentarios:", error.response?.data?.msg || error.message);
-    return [];
-  }
-};
+export const getComments = async (publicationId, desde = 0, limite = 10) => {
+    try {
+      const res = await apiClient.get(`/comments/${publicationId}?desde=${desde}&limite=${limite}`);
+      const comments = res.data.comments || [];
+      if (!Array.isArray(comments)) {
+        console.warn("getComments no retornó un array:", comments);
+        return [];
+      }
+      return comments;
+    } catch (error) {
+      console.error("Error al obtener comentarios:", error);
+      return [];
+    }
+  };
 
 export const getCourses = async () => {
     try {
         const response = await apiClient.get('/courses');
+        console.log('Cursos:', response.data);
         return response;
     } catch (e) {
-        return {
-            error: true,
-            e
-        };
-    }
-};
-
-export const addComment = async (publicationId, comment) => {
-    try {
-        const response = await apiClient.post(`/comments/${publicationId}`, comment);
-        return response.data;
-    } catch (error) {
-        console.error("Error al enviar comentario:", error.response?.data || error.message);
-        return { success: false, message: "Error al enviar comentario" };
+        console.error('Error al obtener cursos:', e);
+        return { error: true, e };
     }
 };
 
@@ -120,17 +114,27 @@ export const getCommentsByPublicationId = async (publicationId) => {
   }
 };
 
-export const getPublicationsByCourse = async (course, { desde = 0, limite = 10 }) => {
+export const getPublicationsByCourse = async (courseId, { desde = 0, limite = 10 } = {}) => {
     try {
-        const response = await apiClient.get('/publications/by-course', {
-            params: { course, desde, limite },
-        });
-        return response;
+      const response = await apiClient.get(`/publications/by-course/${courseId}`, {
+        params: { desde, limite },
+      });
+      return response;
     } catch (e) {
-        return {
-            error: true,
-            e
-        };
+      return {
+        error: true,
+        e
+      };
     }
-};
+  };
 
+  export const addComment = async (publicationId, commentData) => {
+    try {
+      const response = await apiClient.post(`/comments/${publicationId}`, commentData);
+      return response.data;
+    } catch (error) {
+      console.error("Error al agregar comentario:", error);
+      throw error;
+    }
+  };
+  

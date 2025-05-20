@@ -39,10 +39,12 @@ export default function PublicationCard({ publication }) {
       <p className="publication-username">Por: {publication.user?.username || 'Anónimo'}</p>
       <p>{publication.content}</p>
 
+      <div className=''>
       <CommentForm
         publicationId={publication._id}
         onCommentAdded={fetchComments}
       />
+      </div>
 
       <div className="mt-4">
         <h3 className="font-bold mb-2">Comentarios</h3>
