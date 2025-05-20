@@ -21,9 +21,8 @@
     height: calc(100vh - 50px);
     top: 50px;
     bottom: 0;
-    left: 0;
     width: 200px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     flex-direction: column;
 }
@@ -31,12 +30,13 @@
 .create-publication-button{
     height: 120px;
     width: 110px;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.6);
     color: white;
 }
 
 .form-button{
-    
+    margin-top: 80px;
+    margin-left: 40px;
     height: 100px;
     width: 100px;
 }
@@ -50,8 +50,6 @@
 .create-publication-button:hover {
     background-color: #464646;
 }
-
-
 
 .nav-logo-container {
     width: 40px;
@@ -374,8 +372,9 @@
 
 .publication-card {
   background-color: rgba(10, 10, 10, 0.9);
-  padding: 1.5rem;
+  padding: 6rem;
   border-radius: 12px;
+  transition: 0.5s;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
@@ -414,7 +413,7 @@
 .publication-card-2 {
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
+  gap: 1.9rem;
 }
 
 .pagination-container {
@@ -473,6 +472,10 @@
   margin-top: 8rem;
 }
 
+.nav-buttons-container{
+    margin-left: 1750px;
+}
+
 .comment-form {
   display: flex;
   flex-direction: column;
@@ -511,4 +514,61 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.comment-card{
+    background: rgba(0, 0, 0, 0.3);
+    margin-block:initial;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; 
+  max-width: 600px;
+  margin: 1rem auto;
+}
+
+.comment-form input,
+.comment-form textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.comment-form button {
+  align-self: flex-end; 
+  background-color: #1d4ed8;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.comment-form button:hover {
+  background-color: #2563eb;
+}
+
+.form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.form-button {
+  transition: transform 0.2s;
+}
+
+.form-button:hover {
+  transform: scale(1.1);
 }

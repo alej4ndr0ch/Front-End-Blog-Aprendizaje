@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { getPublications } from "../../services/api";
 import { Navbar } from "../../components/navbars/Navbar";
 import { Sidebar } from "../../components/navbars/Sidebar";
+import PublicationCard from "../../components/publication/PublicationCard";
 import { Publications } from "../../components/publication/Publications";
+
 import Eclipse from "../../assets/Eclipse.mp4";
+import { getPaginatedPublications } from "../../services/api";
 
 import "./dashboardPage.css";
 
@@ -11,28 +14,31 @@ export const DashboardPage = () => {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [pagination, setPagination] = useState({ desde: 0, limite: 10 });
+  const [pagination, setPagination] = useState({ desde: 0, limite: 1 });
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetchPublications();
   }, [pagination]);
 
   const fetchPublications = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const response = await getPublications({
-        desde: pagination.desde,
-        limite: pagination.limite,
-      });
-      setPublications(response.data.publications);
-    } catch (err) {
-      console.error(err);
-      setError("No se pudieron cargar las publicaciones.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  setError("");
+  try {
+    const response = await getPublications({
+      desde: pagination.desde,
+      limite: pagination.limite,
+    });
+
+    setPublications(response.data.publications);
+    setTotal(response.data.total);
+  } catch (err) {
+    console.error(err);
+    setError("No se pudieron cargar las publicaciones.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleNext = () => {
     setPagination((prev) => ({ ...prev, desde: prev.desde + prev.limite }));
@@ -82,7 +88,11 @@ export const DashboardPage = () => {
               >
                 Anterior
               </button>
-              <button onClick={handleNext} className="pagination-button">
+              <button
+                onClick={handleNext}
+                disabled={pagination.desde + pagination.limite >= total}
+                className="pagination-button"
+              >
                 Siguiente
               </button>
             </div>

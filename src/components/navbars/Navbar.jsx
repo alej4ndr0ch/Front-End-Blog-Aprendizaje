@@ -7,7 +7,7 @@ const NavLogo = () => {
         <div className="nav-logo-container">
             <img 
                 className="nav-logo"
-                width='80px'
+                width='60px'
                 height='40px'
                 src={logo}
                 alt="Logo personal"
@@ -43,10 +43,9 @@ export const Navbar = () => {
             <NavLogo />
             <div className="nav-buttons-container">
                 {!isLogged ? (
-                    <NavButton text="Login" onClickHandler={handleNavigateToAuthPage}/>
+                    <NavButton text="Login" className={"login-button"} onClickHandler={handleNavigateToAuthPage}/>
                 ) : (
                     <div>
-                        <NavButton text="My Account" onClickHandler={handleNavigateToSettingPage}/>
                         <NavButton text="Logout" onClickHandler={handleLogout}/>
                     </div>
                 )}
